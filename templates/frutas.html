@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4">Gestión de Frutas</h2>
+
+<!-- FORMULARIO AGREGAR FRUTA -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-success text-white">
+        <strong>Agregar Nueva Fruta</strong>
+    </div>
+
+    <div class="card-body">
+        <form action="{{ url_for('frutas_agregar') }}" method="POST" class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" required>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Tipo</label>
+                <input type="text" name="tipo" class="form-control" required>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Tiempo (min)</label>
+                <input type="number" name="tiempo" class="form-control" required>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Temperatura (°C)</label>
+                <input type="number" step="0.1" name="temperatura" class="form-control" required>
+            </div>
+
+            <div class="col-12 mt-3">
+                <button class="btn btn-success px-4">
+                    Agregar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- TABLA DE FRUTAS EXISTENTES -->
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <strong>Listado de Frutas</strong>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-striped table-hover m-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Tiempo (min)</th>
+                    <th>Temp. Ideal (°C)</th>
+                    <th width="180">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for f in frutas %}
+                <tr>
+                    <td>{{ f[0] }}</td>
+                    <td>{{ f[1] }}</td>
+                    <td>{{ f[2] }}</td>
+                    <td>{{ f[3] }}</td>
+                    <td>{{ f[4] }}</td>
+
+                    <td>
+                        <a href="{{ url_for('frutas_editar', id=f[0]) }}"
+                           class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+
+                        <a href="{{ url_for('frutas_eliminar', id=f[0]) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar esta fruta?');">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+{% endblock %}

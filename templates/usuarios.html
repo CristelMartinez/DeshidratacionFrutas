@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- ALERTAS -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestión de Usuarios</h2>
+
+    {% if session["user_role"] == "administrador" %}
+    <a href="{{ url_for('nuevo_usuario') }}" class="btn btn-primary">
+        ➕ Registrar Usuario
+    </a>
+    {% endif %}
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+        <strong>Listado de Usuarios</strong>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-bordered table-striped m-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+
+                    {% if session["user_role"] == "administrador" %}
+                    <th width="180">Acciones</th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario[0] }}</td>
+                    <td>{{ usuario[1] }}</td>
+                    <td>{{ usuario[2] }}</td>
+                    <td>
+                        <span class="badge bg-info text-dark">
+                            {{ usuario[4] }}
+                        </span>
+                    </td>
+
+                    {% if session["user_role"] == "administrador" %}
+                    <td>
+                        <a href="{{ url_for('usuarios_editar', id=usuario[0]) }}"
+                           class="btn btn-warning btn-sm">
+                           ✏ Editar
+                        </a>
+
+                        <a href="{{ url_for('usuarios_eliminar', id=usuario[0]) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar este usuario?')">
+                           🗑 Eliminar
+                        </a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

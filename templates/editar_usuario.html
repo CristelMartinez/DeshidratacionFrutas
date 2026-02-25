@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4">Editar Usuario</h2>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <strong>Modificar Datos del Usuario</strong>
+    </div>
+
+    <div class="card-body">
+        <form method="POST"
+              action="{{ url_for('usuarios_actualizar', id=usuario[0]) }}">
+
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text"
+                       name="nombre"
+                       class="form-control"
+                       value="{{ usuario[1] }}"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email"
+                       name="email"
+                       class="form-control"
+                       value="{{ usuario[2] }}"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="text"
+                       name="password"
+                       class="form-control"
+                       value="{{ usuario[3] }}"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Rol</label>
+                <select name="rol" class="form-select">
+                    <option value="administrador"
+                        {% if usuario[4] == "administrador" %}selected{% endif %}>
+                        Administrador
+                    </option>
+                    <option value="operador"
+                        {% if usuario[4] == "operador" %}selected{% endif %}>
+                        Operador
+                    </option>
+                </select>
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-warning px-4">
+                    Guardar cambios
+                </button>
+
+                <a href="{{ url_for('usuarios') }}"
+                   class="btn btn-secondary px-4">
+                   Cancelar
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}

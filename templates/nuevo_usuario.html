@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Registrar Nuevo Usuario</h2>
+    <a href="{{ url_for('usuarios') }}" class="btn btn-secondary">Volver</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        
+        <form action="{{ url_for('nuevo_usuario') }}" method="post">
+
+            <!-- Nombre -->
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" required>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <!-- Rol -->
+            <div class="mb-3">
+                <label class="form-label">Rol</label>
+                <select name="rol" class="form-select" required>
+                    <option value="administrador">Administrador</option>
+                    <option value="operador">Operador</option>
+                </select>
+            </div>
+
+            <!-- Botón -->
+            <button type="submit" class="btn btn-primary w-100">
+                Registrar Usuario
+            </button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

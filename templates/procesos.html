@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+<head>
+    <meta http-equiv="refresh" content="30">
+</head>
+
+<h2 class="mb-4">Gestión de Procesos de Deshidratación</h2>
+
+{% if session["user_role"] == "administrador" %}
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-success text-white">
+        <strong>Crear Nuevo Proceso</strong>
+    </div>
+
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('procesos_agregar') }}" class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label">Fruta</label>
+                <select name="fruta" class="form-select" required>
+                    <option value="">Seleccione fruta</option>
+                    {% for f in frutas %}
+                    <option value="{{ f[0] }}">{{ f[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Usuario</label>
+                <select name="usuario" class="form-select" required>
+                    <option value="">Seleccione usuario</option>
+                    {% for u in usuarios %}
+                    <option value="{{ u[0] }}">{{ u[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end">
+                <button class="btn btn-success w-100">
+                    Crear Proceso
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <strong>Listado de Procesos</strong>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-striped table-hover m-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Fruta</th>
+                    <th>Usuario</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Estado</th>
+                    <th>Resultado</th>
+                    <th>Tiempo restante</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for p in procesos %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>{{ p.fruta }}</td>
+                    <td>{{ p.usuario }}</td>
+                    <td>{{ p.inicio }}</td>
+                    <td>{{ p.fin or "—" }}</td>
+                    <td>{{ p.estado }}</td>
+                    <td>{{ p.resultado or "—" }}</td>
+                    <td>
+                        {% if p.estado == "en progreso" %}
+                            ⏳ {{ p.restante }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if p.estado == "en progreso" and session["user_role"] == "administrador" %}
+                        <a href="{{ url_for('procesos_cancelar', id=p.id) }}"
+                        class="btn btn-warning btn-sm"
+                        onclick="return confirm('¿Cancelar este proceso?');">
+                        Cancelar
+                        </a>
+{% endif %}
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+{% endblock %}

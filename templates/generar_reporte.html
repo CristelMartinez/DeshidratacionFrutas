@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Generar Reporte Final</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <strong>Seleccionar Proceso</strong>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">Proceso finalizado:</label>
+                    <select name="proceso_id" class="form-select" required>
+                        {% for p in procesos %}
+                        <option value="{{ p[0] }}">
+                            Proceso #{{ p[0] }} - {{ p[1] }} ({{ p[2] }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observaciones:</label>
+                    <textarea name="observaciones"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Ej. El proceso fue exitoso, sin incidencias..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Generar Reporte
+                </button>
+
+                <a href="{{ url_for('reporte') }}" class="btn btn-secondary ms-2">
+                    Ver Reportes
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4">Alertas del sistema</h2>
+
+{% if session["user_role"] == "administrador" %}
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-warning">
+        <strong>Crear nueva alerta</strong>
+    </div>
+
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('alertas_agregar') }}" class="row g-3">
+
+            <div class="col-md-3">
+                <label class="form-label">Proceso</label>
+                <select name="proceso" class="form-select" required>
+                    <option value="">Seleccionar</option>
+                    {% for p in procesos %}
+                    <option value="{{ p[0] }}">Proceso {{ p[0] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Tipo</label>
+                <select name="tipo" class="form-select" required>
+                    <option value="temperatura">Temperatura</option>
+                    <option value="finalización">Finalización</option>
+                    <option value="error">Error</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Mensaje</label>
+                <input type="text" name="mensaje" class="form-control" required>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-warning w-100">Crear</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<!-- TABLA -->
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+        <strong>Listado de alertas</strong>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-striped m-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Proceso</th>
+                    <th>Tipo</th>
+                    <th>Mensaje</th>
+                    <th>Fecha</th>
+                    {% if session["user_role"] == "administrador" %}
+                    <th>Acción</th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for a in alertas %}
+                <tr>
+                    <td>{{ a[0] }}</td>
+                    <td>{{ a[1] }}</td>
+                    <td>
+                        <span class="badge bg-danger">{{ a[2] }}</span>
+                    </td>
+                    <td>{{ a[3] }}</td>
+                    <td>{{ a[4] }}</td>
+
+                    {% if session["user_role"] == "administrador" %}
+                    <td>
+                        <a href="{{ url_for('alertas_eliminar', id=a[0]) }}"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Eliminar alerta?')">
+                           Eliminar
+                        </a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
